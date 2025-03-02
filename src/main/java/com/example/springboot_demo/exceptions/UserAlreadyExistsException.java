@@ -1,0 +1,12 @@
+package com.example.springboot_demo.exceptions;
+
+public class UserAlreadyExistsException extends RuntimeException {
+
+    public UserAlreadyExistsException() {
+        super();
+    }
+
+    public UserAlreadyExistsException(String message) {
+        super(message);
+    }
+}
