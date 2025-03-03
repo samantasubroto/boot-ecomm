@@ -1,6 +1,7 @@
 package com.example.springboot_demo.service.cart.impl;
 
 import com.example.springboot_demo.model.entity.Cart;
+import com.example.springboot_demo.model.entity.CartItem;
 import com.example.springboot_demo.model.entity.Customer;
 import com.example.springboot_demo.model.entity.Product;
 import com.example.springboot_demo.repository.CartRepository;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -28,30 +29,41 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart getUserCart(String userId) {
         Customer customer = customerRepository.getCustomerByEmail(userId);
-        Cart userCart =  cartRepository.getUsersCart(customer);
-        if (userCart != null) {
-            return userCart;
-        }
-        return null;
+        Cart userCart = cartRepository.getUsersCart(customer);
+        return userCart;
     }
 
     @Override
     public Cart addProductToCart(final String productId, final String userId) {
         Product product = productRepository.getProductByCode(productId);
-            Customer customer = customerRepository.getCustomerByEmail(userId);
+        Customer customer = customerRepository.getCustomerByEmail(userId);
 
-        try {
-            if(product != null && customer != null) {
-                Cart cart = cartRepository.getUsersCart(customer);
-                Set<Product> products = cart.getProducts();
-                products.add(product);
-                cart.setProducts(products);
-                cartRepository.save(cart);
-                return cart;
-            }
-        } catch (Exception e) {
-            System.out.println("Error while adding product to cart "+e.getMessage().toString());
+        if (product == null || customer == null) {
+            throw new RuntimeException("Invalid product or customer");
         }
-        return null;
+        Cart cart = cartRepository.getUsersCart(customer);
+        if (cart == null) {
+            cart = new Cart();
+            cart.setCustomer(customer);
+        }
+        List<CartItem> cartItems = cart.getCartItems();
+        Optional<CartItem> existingItem = cartItems.stream().filter(item -> item.getProduct().getCode().equals(product.getCode())).findFirst();
+        if (existingItem.isPresent()) {
+            CartItem cartItem = existingItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+        } else {
+            CartItem cartItem = new CartItem();
+            cartItem.setProduct(product);
+            cartItem.setQuantity(1);
+            cartItems.add(cartItem);
+        }
+
+        cart.setCartItems(cartItems);
+        cart.setCartTotal(calculateCartTotal(cart));
+        return cartRepository.save(cart);
+    }
+
+    private double calculateCartTotal(Cart cart) {
+        return cart.getCartItems().stream().mapToDouble(item -> item.getProduct().getPrice().getValue() * item.getQuantity()).sum();
     }
 }
