@@ -8,6 +8,8 @@ import com.example.springboot_demo.repository.CartRepository;
 import com.example.springboot_demo.repository.CustomerRepository;
 import com.example.springboot_demo.repository.ProductRepository;
 import com.example.springboot_demo.service.cart.CartService;
+import com.example.springboot_demo.service.product.ProductService;
+import com.example.springboot_demo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,22 +23,22 @@ public class CartServiceImpl implements CartService {
     private CartRepository cartRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserService userService;
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @Override
     public Cart getUserCart(String userId) {
-        Customer customer = customerRepository.getCustomerByEmail(userId);
+        Customer customer = userService.getCustomerByEmail(userId);
         Cart userCart = cartRepository.getUsersCart(customer);
         return userCart;
     }
 
     @Override
     public Cart addProductToCart(final String productId, final String userId) {
-        Product product = productRepository.getProductByCode(productId);
-        Customer customer = customerRepository.getCustomerByEmail(userId);
+        Product product = productService.getProductByCode(productId);
+        Customer customer = userService.getCustomerByEmail(userId);
 
         if (product == null || customer == null) {
             throw new RuntimeException("Invalid product or customer");
