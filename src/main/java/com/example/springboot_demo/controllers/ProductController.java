@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/search")
-    public Page<Product> getProducts(
+    public ResponseEntity getProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -30,16 +32,16 @@ public class ProductController {
     ) {
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return productService.getProducts(pageable);
+        return new ResponseEntity(productService.getProducts(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    public ResponseEntity getProductById(@PathVariable Long id) {
+        return new ResponseEntity(productService.getProductById(id), HttpStatus.OK);
     }
 
     @GetMapping()
-    public List<Product> getProductsByName(@RequestParam @NotNull String name) {
-        return productService.getProductsByName(name);
+    public ResponseEntity getProductsByName(@RequestParam @NotNull String name) {
+        return new ResponseEntity(productService.getProductsByName(name), HttpStatus.OK);
     }
 }
