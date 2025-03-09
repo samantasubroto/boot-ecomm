@@ -17,7 +17,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/products")
+@RequestMapping("api/products")
 public class ProductController {
 
     @Autowired
@@ -35,9 +35,9 @@ public class ProductController {
         return new ResponseEntity(productService.getProducts(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getProductById(@PathVariable Long id) {
-        return new ResponseEntity(productService.getProductById(id), HttpStatus.OK);
+    @GetMapping("/{code}")
+    public ResponseEntity getProductById(@PathVariable String code) {
+        return new ResponseEntity(productService.getProductByCode(code), HttpStatus.OK);
     }
 
     @GetMapping()

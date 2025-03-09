@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Product getProductById(Long id);
-
     @Query("SELECT p FROM Product p WHERE p.code = :code")
     Product getProductByCode(String code);
 
