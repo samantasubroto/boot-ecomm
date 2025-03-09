@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -22,5 +24,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductById(Long code) {
        return productRepository.getProductById(code);
+    }
+
+    @Override
+    public List<Product> getProductsByName(String name) {
+        return productRepository.getProductsByName(name);
+    }
+
+    @Override
+    public Product getProductByCode(final String productId) {
+        return productRepository.getProductByCode(productId);
     }
 }
