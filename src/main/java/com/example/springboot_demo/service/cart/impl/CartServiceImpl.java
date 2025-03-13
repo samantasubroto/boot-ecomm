@@ -4,12 +4,12 @@ import com.example.springboot_demo.model.entity.Cart;
 import com.example.springboot_demo.model.entity.CartItem;
 import com.example.springboot_demo.model.entity.Customer;
 import com.example.springboot_demo.model.entity.Product;
+import com.example.springboot_demo.model.enums.StockStatus;
 import com.example.springboot_demo.repository.CartRepository;
-import com.example.springboot_demo.repository.CustomerRepository;
-import com.example.springboot_demo.repository.ProductRepository;
 import com.example.springboot_demo.service.cart.CartService;
 import com.example.springboot_demo.service.product.ProductService;
 import com.example.springboot_demo.service.user.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,14 +36,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public Cart addProductToCart(final String productId, final String userId) {
         Product product = productService.getProductByCode(productId);
         Customer customer = userService.getCustomerByEmail(userId);
 
-        if (product == null || customer == null) {
+        if (product == null || customer == null || product.getStock().stockStatus.equals(StockStatus.OUTOFSTOCK)) {
             throw new RuntimeException("Invalid product or customer");
         }
-        Cart cart = cartRepository.getUsersCart(customer);
+        Cart cart = getUserCart(userId);
         if (cart == null) {
             cart = new Cart();
             cart.setCustomer(customer);
@@ -63,6 +64,10 @@ public class CartServiceImpl implements CartService {
         cart.setCartItems(cartItems);
         cart.setCartTotal(calculateCartTotal(cart));
         return cartRepository.save(cart);
+    }
+
+    public void saveCart(final Cart cart) {
+        this.cartRepository.save(cart);
     }
 
     private double calculateCartTotal(Cart cart) {

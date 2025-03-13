@@ -8,4 +8,6 @@ public interface CartService {
     Cart getUserCart(final String userId);
 
     Cart addProductToCart(final String productId, final String userId);
+
+    void saveCart(final Cart cart);
 }
