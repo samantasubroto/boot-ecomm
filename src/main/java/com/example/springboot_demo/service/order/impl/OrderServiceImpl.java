@@ -68,6 +68,16 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    @Override
+    @Transactional
+    public List<Order> getOrders(final String customerId) {
+        Customer customer = userService.getCustomerByEmail(customerId);
+        if (customer != null) {
+            return orderRepository.fetchAllOrders(customerId);
+        }
+        return null;
+    }
+
     private String generateOrderNumber() {
         return String.format("%010d", new Random().nextInt(1_000_000_000));
     }
