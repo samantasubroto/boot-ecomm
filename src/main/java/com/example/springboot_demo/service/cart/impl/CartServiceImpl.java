@@ -1,9 +1,6 @@
 package com.example.springboot_demo.service.cart.impl;
 
-import com.example.springboot_demo.model.entity.Cart;
-import com.example.springboot_demo.model.entity.CartItem;
-import com.example.springboot_demo.model.entity.Customer;
-import com.example.springboot_demo.model.entity.Product;
+import com.example.springboot_demo.model.entity.*;
 import com.example.springboot_demo.model.enums.StockStatus;
 import com.example.springboot_demo.repository.CartRepository;
 import com.example.springboot_demo.service.cart.CartService;
@@ -41,13 +38,17 @@ public class CartServiceImpl implements CartService {
         Product product = productService.getProductByCode(productId);
         Customer customer = userService.getCustomerByEmail(userId);
 
-        if (product == null || customer == null || product.getStock().stockStatus.equals(StockStatus.OUTOFSTOCK)) {
+        if (product == null || customer == null) {
             throw new RuntimeException("Invalid product or customer");
+        }
+        if (product.getStock().stockStatus.equals(StockStatus.OUTOFSTOCK)) {
+            throw new RuntimeException("Product is out of stock!!!");
         }
         Cart cart = getUserCart(userId);
         if (cart == null) {
             cart = new Cart();
             cart.setCustomer(customer);
+            customer.setCart(cart);
         }
         List<CartItem> cartItems = cart.getCartItems();
         Optional<CartItem> existingItem = cartItems.stream().filter(item -> item.getProduct().getCode().equals(product.getCode())).findFirst();
@@ -62,7 +63,74 @@ public class CartServiceImpl implements CartService {
         }
 
         cart.setCartItems(cartItems);
-        cart.setCartTotal(calculateCartTotal(cart));
+        cart.setCartTotal(Math.round(calculateCartTotal(cart)));
+
+        return cartRepository.save(cart);
+    }
+
+    @Override
+    @Transactional
+    public Cart removeProductFromCart(final String productId, final String userId) {
+        Product product = productService.getProductByCode(productId);
+        Customer customer = userService.getCustomerByEmail(userId);
+        if (product == null || customer == null) {
+            throw new RuntimeException("Invalid product or customer");
+        }
+        Cart cart = getUserCart(userId);
+        if (cart == null) {
+            throw new RuntimeException("Cart not found!!!");
+        }
+        List<CartItem> cartItems = cart.getCartItems();
+        Optional<CartItem> existingItem = cartItems.stream().filter(item -> item.getProduct().getCode().equals(product.getCode())).findFirst();
+        if (existingItem.isPresent()) {
+            CartItem cartItem = existingItem.get();
+            if (cartItem.getQuantity() > 1) {
+                cartItem.setQuantity(cartItem.getQuantity() - 1);
+            } else {
+                cartItems.remove(cartItem);
+            }
+        } else {
+            return cart;
+        }
+        cart.setCartItems(cartItems);
+        cart.setCartTotal(Math.round(calculateCartTotal(cart)));
+        return cartRepository.save(cart);
+    }
+
+    @Override
+    @Transactional
+    public Cart deleteProductFromCart(final String productId, final String userId) {
+        Product product = productService.getProductByCode(productId);
+        Customer customer = userService.getCustomerByEmail(userId);
+        if (product == null || customer == null) {
+            throw new RuntimeException("Invalid product or customer");
+        }
+        Cart cart = getUserCart(userId);
+        if (cart == null) {
+            throw new RuntimeException("Cart not found!!!");
+        }
+        List<CartItem> cartItems = cart.getCartItems();
+        Optional<CartItem> existingItem = cartItems.stream().filter(item -> item.getProduct().getCode().equals(product.getCode())).findFirst();
+        existingItem.ifPresent(cartItems::remove);
+
+        cart.setCartItems(cartItems);
+        cart.setCartTotal(Math.round(calculateCartTotal(cart)));
+        return cartRepository.save(cart);
+    }
+
+    @Override
+    @Transactional
+    public Cart deleteCart(final String userId) {
+        Customer customer = userService.getCustomerByEmail(userId);
+        if (customer == null) {
+            throw new RuntimeException("Invalid product or customer");
+        }
+        Cart cart = getUserCart(userId);
+        if (cart == null) {
+            return null;
+        }
+        cart.getCartItems().clear();
+        cart.setCartTotal(0.0);
         return cartRepository.save(cart);
     }
 

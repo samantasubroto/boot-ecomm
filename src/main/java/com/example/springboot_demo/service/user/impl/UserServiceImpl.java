@@ -21,4 +21,14 @@ public class UserServiceImpl implements UserService {
     public Customer getCustomerByEmail(final String customerId) {
         return this.customerRepository.getCustomerByEmail(customerId);
     }
+
+    @Override
+    public User getUserByEmail(final String userId) {
+        return this.userRepository.getCustomerByEmail(userId);
+    }
+
+    @Override
+    public void saveCustomer(final Customer customer) {
+        this.customerRepository.save(customer);
+    }
 }

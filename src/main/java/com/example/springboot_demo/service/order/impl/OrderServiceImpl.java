@@ -34,6 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order placeOrder(final String customerid) {
         Cart cart = cartService.getUserCart(customerid);
+        Customer customer = userService.getCustomerByEmail(customerid);
         if (cart != null && cart.getCartItems().isEmpty()) {
             throw new RuntimeException("Cart is empty");
         }
@@ -43,12 +44,14 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNumber(generateOrderNumber());
         order.setStatus(OrderStatus.PENDING);
         order.setTotalPrice(cart.getCartTotal());
-        order.setShippingAddress(userService.getCustomerByEmail(customerid).getAddress().get(0));
+        if (customer.getAddress() != null) {
+            order.setShippingAddress(customer.getAddress().get(0));
+        }
 
         List<OrderItem> orderItems = cart.getCartItems().stream()
                 .map(cartItem -> {
                     OrderItem orderItem = new OrderItem();
-//                    orderItem.setOrder(order);
+                    orderItem.setOrder(order);
                     orderItem.setProduct(cartItem.getProduct());
                     orderItem.setQuantity(cartItem.getQuantity());
                     orderItem.setPriceAtPurchase(cartItem.getProduct().getPrice().getValue());

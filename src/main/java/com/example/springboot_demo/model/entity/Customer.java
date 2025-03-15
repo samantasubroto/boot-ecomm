@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@DiscriminatorValue("CUSTOMER")
 public class Customer extends User {
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -20,4 +22,9 @@ public class Customer extends User {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
+
+    public Customer(String firstName, String lastName, String email, String password, String phone, Set<String> roles, List<Address> address) {
+        super(firstName, lastName, email, password, phone, roles);
+        this.address = address;
+    }
 }
