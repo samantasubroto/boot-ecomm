@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("api/cart")
 public class CartController {
 
     @Autowired
@@ -24,10 +24,22 @@ public class CartController {
     }
 
     @PostMapping("/addtocart")
-    public ResponseEntity addProductToCart(
-            @RequestParam(required = true) String productId,
-            @RequestParam(required = true) String userId
-    ) {
+    public ResponseEntity addProductToCart(@RequestParam(required = true) String productId, @RequestParam(required = true) String userId) {
         return new ResponseEntity(cartService.addProductToCart(productId, userId), HttpStatus.OK);
+    }
+
+    @PutMapping("/removefromcart")
+    public ResponseEntity removeProductFromCart(@RequestParam(required = true) String productId, @RequestParam(required = true) String userId) {
+        return new ResponseEntity(cartService.removeProductFromCart(productId, userId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deletefromcart")
+    public ResponseEntity deleteProductFromCart(@RequestParam(required = true) String productId, @RequestParam(required = true) String userId) {
+        return new ResponseEntity(cartService.deleteProductFromCart(productId, userId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteCart(@RequestParam(required = true) String userId) {
+        return new ResponseEntity(cartService.deleteCart(userId), HttpStatus.OK);
     }
 }

@@ -8,4 +8,12 @@ public interface CartService {
     Cart getUserCart(final String userId);
 
     Cart addProductToCart(final String productId, final String userId);
+
+    Cart removeProductFromCart(final String productId, final String userId);
+
+    Cart deleteProductFromCart(final String productId, final String userId);
+
+    Cart deleteCart(final String userId);
+
+    void saveCart(final Cart cart);
 }

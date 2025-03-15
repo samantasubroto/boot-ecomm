@@ -1,6 +1,7 @@
 package com.example.springboot_demo.model.entity;
 
 import com.example.springboot_demo.model.ItemType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,9 +16,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItem extends ItemType {
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-//    private double price;
+
     private int quantity;
 }

@@ -19,6 +19,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EntityListeners(UserModelListner.class)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 public class User extends ItemType {
 
     @Column(unique = true, updatable = false, nullable = false)
@@ -58,6 +60,7 @@ public class User extends ItemType {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @NotNull
+    @NonNull
     private Set<String> roles;
 
     @Nullable
