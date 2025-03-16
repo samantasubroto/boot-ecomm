@@ -30,6 +30,9 @@ public class Order extends ItemType{
 
     private PaymentMethod paymentMethod;
 
+    @Column(name="razorpayorderid")
+    private String razorpayOrderId;
+
     @ManyToOne
     @JoinColumn(name = "shipping_address_id", nullable = false)
     private Address shippingAddress;
