@@ -9,6 +9,7 @@ import com.example.springboot_demo.repository.CartRepository;
 import com.example.springboot_demo.repository.OrderRepository;
 import com.example.springboot_demo.service.cart.CartService;
 import com.example.springboot_demo.service.order.OrderService;
+import com.example.springboot_demo.service.payment.PaymentGateways;
 import com.example.springboot_demo.service.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private PaymentGateways paymentGateways;
 
     @Override
     @Transactional
@@ -59,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
                 }).collect(Collectors.toList());
 
         order.setOrderItems(orderItems);
+        this.paymentGateways.createPayment(order);
         orderRepository.save(order);
 
         cart.getCartItems().clear();
