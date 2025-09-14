@@ -20,8 +20,11 @@ public class Customer extends User {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Address> address;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Order> orders;
 
     public Customer(String firstName, String lastName, String email, String password, String phone, Set<String> roles, List<Address> address) {
         super(firstName, lastName, email, password, phone, roles);

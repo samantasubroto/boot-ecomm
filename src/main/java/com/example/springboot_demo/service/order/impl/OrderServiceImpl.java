@@ -41,9 +41,9 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setCustomer(cart.getCustomer());
-        order.setOrderNumber(generateOrderNumber());
+        order.setCode(generateOrderNumber());
         order.setStatus(OrderStatus.PENDING);
-        order.setTotalPrice(cart.getCartTotal());
+        order.setTotalPrice(cart.getTotalPrice());
         if (customer.getAddress() != null) {
             order.setShippingAddress(customer.getAddress().get(0));
         }
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
 
         cart.getCartItems().clear();
-        cart.setCartTotal(0.0);
+        cart.setTotalPrice(0.0);
         cartService.saveCart(cart);
 
         return order;

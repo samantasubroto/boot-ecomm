@@ -30,7 +30,7 @@ public class DataController {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @GetMapping("/product/data")
+    @PostMapping("/product/data")
     public String setProd() {
         List<Product> products = new ArrayList<>();
         products.add(new Product("100000001", "Product 1", "High-quality product", "Top seller", true, new Price(Currency.INR, 198.22, true), "image1.jpg", new Stock(StockStatus.INSTOCK, 55)));
@@ -82,11 +82,11 @@ public class DataController {
         List<Customer> customers = new ArrayList<>();
 
         // Creating Addresses for customers
-        List<Address> rohitAddress = List.of(new Address("101", "Sunshine Apartments", "MG Road", "Mumbai", "Maharashtra", "400001", null));
-        List<Address> vikasAddress = List.of(new Address("102", "Green Residency", "HSR Layout", "Bangalore", "Karnataka", "560102", null));
-        List<Address> shreyasAddress = List.of(new Address("103", "Skyline Towers", "Anna Nagar", "Chennai", "Tamil Nadu", "600040", null));
-        List<Address> viratAddress = List.of(new Address("104", "Royal Mansion", "Sector 45", "Delhi", "Delhi", "110001", null));
-        List<Address> rainaAddress = List.of(new Address("105", "Elegant Homes", "Salt Lake", "Kolkata", "West Bengal", "700091", null));
+        List<Address> rohitAddress = List.of(new Address("101", "Sunshine Apartments", "MG Road", "Mumbai", "Maharashtra", "400001", null, true));
+        List<Address> vikasAddress = List.of(new Address("102", "Green Residency", "HSR Layout", "Bangalore", "Karnataka", "560102", null, true));
+        List<Address> shreyasAddress = List.of(new Address("103", "Skyline Towers", "Anna Nagar", "Chennai", "Tamil Nadu", "600040", null, true));
+        List<Address> viratAddress = List.of(new Address("104", "Royal Mansion", "Sector 45", "Delhi", "Delhi", "110001", null, true));
+        List<Address> rainaAddress = List.of(new Address("105", "Elegant Homes", "Salt Lake", "Kolkata", "West Bengal", "700091", null, true));
 
         // Creating Customer objects with Address list
         Customer rohit = new Customer("rohit", "sharma", "rohitsharma@gmail.com", "Sharma@123", "9959974149", new HashSet<>(List.of("Customer")), rohitAddress);

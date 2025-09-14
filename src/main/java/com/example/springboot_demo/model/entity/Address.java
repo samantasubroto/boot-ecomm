@@ -3,6 +3,7 @@ package com.example.springboot_demo.model.entity;
 import com.example.springboot_demo.model.ItemType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +41,10 @@ public class Address extends ItemType {
     @Pattern(regexp = "[0-9]{6}", message = "Pincode not valid. Must be 6 digits")
     private String pincode;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonIgnore
     private Customer customer;
+
+    @Column(name = "is_primary")
+    private boolean isPrimary;
 }

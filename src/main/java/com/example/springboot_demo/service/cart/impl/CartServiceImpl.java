@@ -7,6 +7,7 @@ import com.example.springboot_demo.service.cart.CartService;
 import com.example.springboot_demo.service.product.ProductService;
 import com.example.springboot_demo.service.user.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +29,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart getUserCart(String userId) {
         Customer customer = userService.getCustomerByEmail(userId);
-        Cart userCart = cartRepository.getUsersCart(customer);
-        return userCart;
+        return getOrCreateUserCart(customer);
     }
 
     @Override
     @Transactional
-    public Cart addProductToCart(final String productId, final String userId) {
+    public Cart addProductToCart(@NotNull final String productId, @NotNull final String userId) {
         Product product = productService.getProductByCode(productId);
         Customer customer = userService.getCustomerByEmail(userId);
 
@@ -44,27 +44,27 @@ public class CartServiceImpl implements CartService {
         if (product.getStock().stockStatus.equals(StockStatus.OUTOFSTOCK)) {
             throw new RuntimeException("Product is out of stock!!!");
         }
-        Cart cart = getUserCart(userId);
-        if (cart == null) {
-            cart = new Cart();
-            cart.setCustomer(customer);
-            customer.setCart(cart);
-        }
+        Cart cart = getOrCreateUserCart(customer);
         List<CartItem> cartItems = cart.getCartItems();
-        Optional<CartItem> existingItem = cartItems.stream().filter(item -> item.getProduct().getCode().equals(product.getCode())).findFirst();
-        if (existingItem.isPresent()) {
-            CartItem cartItem = existingItem.get();
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-        } else {
-            CartItem cartItem = new CartItem();
-            cartItem.setProduct(product);
-            cartItem.setQuantity(1);
-            cartItems.add(cartItem);
-        }
+        cartItems.stream().filter(
+                        item -> item
+                                .getProduct()
+                                .getCode()
+                                .equals(product.getCode()))
+                .findFirst()
+                .ifPresentOrElse((cartItem) -> {
+                    cartItem.setQuantity(cartItem.getQuantity() + 1);
+                }, () -> {
+                    CartItem cartItem = new CartItem();
+                    cartItem.setProduct(product);
+                    cartItem.setQuantity(1);
+                    cartItem.setCart(cart);
+                    cart.getCartItems().add(cartItem);
+                });
 
+        setCartEntryNumberStartagy(cartItems);
         cart.setCartItems(cartItems);
-        cart.setCartTotal(Math.round(calculateCartTotal(cart)));
-
+        cart.setTotalPrice(Math.round(calculateCartTotal(cart)));
         return cartRepository.save(cart);
     }
 
@@ -93,7 +93,7 @@ public class CartServiceImpl implements CartService {
             return cart;
         }
         cart.setCartItems(cartItems);
-        cart.setCartTotal(Math.round(calculateCartTotal(cart)));
+        cart.setTotalPrice(Math.round(calculateCartTotal(cart)));
         return cartRepository.save(cart);
     }
 
@@ -114,7 +114,7 @@ public class CartServiceImpl implements CartService {
         existingItem.ifPresent(cartItems::remove);
 
         cart.setCartItems(cartItems);
-        cart.setCartTotal(Math.round(calculateCartTotal(cart)));
+        cart.setTotalPrice(Math.round(calculateCartTotal(cart)));
         return cartRepository.save(cart);
     }
 
@@ -130,8 +130,25 @@ public class CartServiceImpl implements CartService {
             return null;
         }
         cart.getCartItems().clear();
-        cart.setCartTotal(0.0);
+        cart.setTotalPrice(0.0);
         return cartRepository.save(cart);
+    }
+
+    protected Cart getOrCreateUserCart(@NotNull final Customer customer) {
+        Cart cart = cartRepository.getUsersCart(customer);
+        if (cart == null) {
+            cart = new Cart();
+            cart.setCustomer(customer);
+            customer.setCart(cart);
+        }
+        return cart;
+    }
+
+    protected void setCartEntryNumberStartagy(List<CartItem> cartItems) {
+        var itemNumber = 0;
+        for (CartItem cartItem: cartItems) {
+            cartItem.setEntryNumber(itemNumber++);
+        }
     }
 
     public void saveCart(final Cart cart) {

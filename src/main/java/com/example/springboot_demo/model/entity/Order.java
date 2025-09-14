@@ -18,17 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Table(name = "orders")
-public class Order extends ItemType{
+public class Order extends AbstractOrder {
 
-    @Column(nullable = false, unique = true, length = 10)
-    private String orderNumber;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
-    private OrderStatus status;
-
-    private PaymentMethod paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "shipping_address_id", nullable = false)
@@ -37,7 +31,4 @@ public class Order extends ItemType{
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OrderItem> orderItems = new ArrayList<>();
-
-    @Column(nullable = false)
-    private double totalPrice;
 }

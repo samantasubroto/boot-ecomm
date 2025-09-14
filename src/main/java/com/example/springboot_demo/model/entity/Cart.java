@@ -2,6 +2,7 @@ package com.example.springboot_demo.model.entity;
 
 import com.example.springboot_demo.model.ItemType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,15 +15,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart extends ItemType {
+public class Cart extends AbstractOrder {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cart_id")
+    @JsonManagedReference
     private List<CartItem> cartItems = new ArrayList<>();
 
-    private double cartTotal;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
     private Customer customer;
 }
