@@ -44,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNumber(generateOrderNumber());
         order.setStatus(OrderStatus.PENDING);
         order.setTotalPrice(cart.getCartTotal());
+        //Give customer more flexiblity to choose address that he/she wanna use.
         if (customer.getAddress() != null) {
             order.setShippingAddress(customer.getAddress().get(0));
         }

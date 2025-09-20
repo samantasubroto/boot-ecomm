@@ -82,25 +82,25 @@ public class DataController {
         List<Customer> customers = new ArrayList<>();
 
         // Creating Addresses for customers
-        List<Address> rohitAddress = List.of(new Address("101", "Sunshine Apartments", "MG Road", "Mumbai", "Maharashtra", "400001", null));
-        List<Address> vikasAddress = List.of(new Address("102", "Green Residency", "HSR Layout", "Bangalore", "Karnataka", "560102", null));
-        List<Address> shreyasAddress = List.of(new Address("103", "Skyline Towers", "Anna Nagar", "Chennai", "Tamil Nadu", "600040", null));
-        List<Address> viratAddress = List.of(new Address("104", "Royal Mansion", "Sector 45", "Delhi", "Delhi", "110001", null));
-        List<Address> rainaAddress = List.of(new Address("105", "Elegant Homes", "Salt Lake", "Kolkata", "West Bengal", "700091", null));
+        List<Address> rohitAddress = List.of(new Address("101", "Sunshine Apartments", "MG Road", "Mumbai", "Maharashtra", "400001", true));
+        List<Address> vikasAddress = List.of(new Address("102", "Green Residency", "HSR Layout", "Bangalore", "Karnataka", "560102", true));
+        List<Address> shreyasAddress = List.of(new Address("103", "Skyline Towers", "Anna Nagar", "Chennai", "Tamil Nadu", "600040", true));
+        List<Address> viratAddress = List.of(new Address("104", "Royal Mansion", "Sector 45", "Delhi", "Delhi", "110001", true));
+        List<Address> rainaAddress = List.of(new Address("105", "Elegant Homes", "Salt Lake", "Kolkata", "West Bengal", "700091", true));
 
         // Creating Customer objects with Address list
-        Customer rohit = new Customer("rohit", "sharma", "rohitsharma@gmail.com", "Sharma@123", "9959974149", new HashSet<>(List.of("Customer")), rohitAddress);
-        Customer vikas = new Customer("vikas", "sharma", "vikassharma@gmail.com", "Sharma@123", "9348291212", new HashSet<>(List.of("Customer")), vikasAddress);
-        Customer shreyas = new Customer("shreyas", "sharma", "shreyassharma@gmail.com", "Sharma@123", "9348291213", new HashSet<>(List.of("Customer")), shreyasAddress);
-        Customer virat = new Customer("virat", "sharma", "viratsharma@gmail.com", "Sharma@123", "9348291214", new HashSet<>(List.of("Customer")), viratAddress);
-        Customer raina = new Customer("raina", "sharma", "rainasharma@gmail.com", "Sharma@123", "9348291215", new HashSet<>(List.of("Customer")), rainaAddress);
+        Customer rohit = new Customer("rohit", "sharma", "rohitsharma@gmail.com", "Sharma@123", "9959974149", new HashSet<>(List.of("Customer")));
+        Customer vikas = new Customer("vikas", "sharma", "vikassharma@gmail.com", "Sharma@123", "9348291212", new HashSet<>(List.of("Customer")));
+        Customer shreyas = new Customer("shreyas", "sharma", "shreyassharma@gmail.com", "Sharma@123", "9348291213", new HashSet<>(List.of("Customer")));
+        Customer virat = new Customer("virat", "sharma", "viratsharma@gmail.com", "Sharma@123", "9348291214", new HashSet<>(List.of("Customer")));
+        Customer raina = new Customer("raina", "sharma", "rainasharma@gmail.com", "Sharma@123", "9348291215", new HashSet<>(List.of("Customer")));
 
         // Setting each Address's Customer field
-        rohit.getAddress().forEach(addr -> addr.setCustomer(rohit));
-        vikas.getAddress().forEach(addr -> addr.setCustomer(vikas));
-        shreyas.getAddress().forEach(addr -> addr.setCustomer(shreyas));
-        virat.getAddress().forEach(addr -> addr.setCustomer(virat));
-        raina.getAddress().forEach(addr -> addr.setCustomer(raina));
+//        rohit.getAddress().forEach(addr -> addr.setCustomer(rohit));
+//        vikas.getAddress().forEach(addr -> addr.setCustomer(vikas));
+//        shreyas.getAddress().forEach(addr -> addr.setCustomer(shreyas));
+//        virat.getAddress().forEach(addr -> addr.setCustomer(virat));
+//        raina.getAddress().forEach(addr -> addr.setCustomer(raina));
 
         // Adding customers to list
         customers.add(rohit);

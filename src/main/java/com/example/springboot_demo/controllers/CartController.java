@@ -16,11 +16,7 @@ public class CartController {
 
     @GetMapping()
     public ResponseEntity getUserCart(@RequestParam(required = true) String userId) {
-        Cart userCart = cartService.getUserCart(userId);
-        if (userCart != null) {
-            return new ResponseEntity(userCart, HttpStatus.FOUND);
-        }
-        return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(cartService.getUserCart(userId), HttpStatus.OK);
     }
 
     @PostMapping("/addtocart")

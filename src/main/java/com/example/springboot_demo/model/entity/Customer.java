@@ -17,14 +17,13 @@ import java.util.Set;
 @DiscriminatorValue("CUSTOMER")
 public class Customer extends User {
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
 
-    public Customer(String firstName, String lastName, String email, String password, String phone, Set<String> roles, List<Address> address) {
+    public Customer(String firstName, String lastName, String email, String password, String phone, Set<String> roles) {
         super(firstName, lastName, email, password, phone, roles);
-        this.address = address;
     }
 }
