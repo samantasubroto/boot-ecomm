@@ -50,9 +50,7 @@ public class WishlistServiceImpl implements WishlistService {
         if (customer != null && product != null) {
             WishList wishList = wishlistRepository.findWishlistByCustomer(customer.getId())
                     .orElseGet(() -> new WishList(new ArrayList<>(), customer));
-            if (wishList.getProducts().contains(product)) {
-                wishList.getProducts().remove(product);
-            }
+            wishList.getProducts().remove(product);
             return wishlistRepository.save(wishList);
         }
         return null;

@@ -15,5 +15,5 @@ public interface CartService {
 
     Cart deleteCart(final String userId);
 
-    void saveCart(final Cart cart);
+    Cart saveCart(final Cart cart);
 }

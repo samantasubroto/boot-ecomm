@@ -22,7 +22,11 @@ public class Cart extends ItemType {
 
     private double cartTotal;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonIgnore
     private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "shipping_address")
+    private Address shippingAddress;
 }
