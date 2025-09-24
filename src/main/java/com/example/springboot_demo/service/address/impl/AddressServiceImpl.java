@@ -7,6 +7,8 @@ import com.example.springboot_demo.service.address.AddressService;
 import com.example.springboot_demo.service.user.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +31,8 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> getUserAddresses(@NotNull final String userId) {
-        Customer customer = userService.getCustomerByEmail(userId);
+    public List<Address> getUserAddresses(@NonNull final String userId) {
+        Customer customer = (Customer) userService.getCurrentCustomer();
         if (customer != null) {
             List<Address> addresses = addressRepository.getUsersAddresses(customer);
             return addresses;
@@ -40,7 +42,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<Address> addUserAddress(@NotNull  final Address address, @NotNull final String userId) {
-        Customer customer = userService.getCustomerByEmail(userId);
+        Customer customer = (Customer) userService.getCurrentCustomer();
         if (customer == null) {
             throw new RuntimeException("User Not Found");
         }

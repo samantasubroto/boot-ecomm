@@ -10,4 +10,6 @@ public interface UserService {
     User getUserByEmail(final String userId);
 
     void saveCustomer(final Customer customer);
+
+    User getCurrentCustomer();
 }

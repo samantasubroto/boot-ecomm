@@ -4,6 +4,7 @@ import com.example.springboot_demo.model.entity.User;
 import com.example.springboot_demo.repository.CartRepository;
 import com.example.springboot_demo.repository.UserRepository;
 import com.example.springboot_demo.service.authentication.UserAuthenticationService;
+import com.example.springboot_demo.service.user.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import org.hibernate.exception.ConstraintViolationException;
@@ -23,7 +24,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
     private final RestTemplate restTemplate = new RestTemplate();
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private CartRepository cartRepository;
@@ -36,7 +37,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             throw new IllegalArgumentException("Email and password must not be null");
         }
 
-        if (userRepository.getCustomerByEmail(user.getEmail()) != null) {
+        if (userService.getCustomerByEmail(user.getEmail()) != null) {
             throw new RuntimeException("User with email " + user.getEmail() + " already exists");
         }
 
@@ -52,7 +53,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             user.setUuid(firebaseUser.getUid());
             user.setActive(true);
             user.setLastLogin(LocalDateTime.now());
-            return userRepository.save(user);
+            return userService.save(user);
         } catch (ConstraintViolationException e) {
             if (firebaseUser != null) {
                 try {

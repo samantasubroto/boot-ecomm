@@ -5,6 +5,7 @@ import com.example.springboot_demo.model.wsDto.AddressDTO;
 import com.example.springboot_demo.service.address.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,8 +21,8 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity getAddresses(@RequestParam(required = true) String userId) {
-        return ResponseEntity.ok(AddressMapper.toDTOList(addressService.getUserAddresses(userId)));
+    public ResponseEntity getAddresses() {
+        return ResponseEntity.ok(AddressMapper.toDTOList(addressService.getUserAddresses(null)));
     }
 
     @PostMapping
