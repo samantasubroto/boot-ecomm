@@ -4,11 +4,11 @@ import com.example.springboot_demo.model.entity.WishList;
 
 public interface WishlistService {
 
-    WishList addProductToList(final String productId, final String customerId);
+    WishList addProductToList(final String productId);
 
-    WishList removeProductFromList(final String productId, final String CustomerId);
+    WishList removeProductFromList(final String productId);
 
-    WishList getCustomersWishList(final String customerId);
+    WishList getCustomersWishList();
 
-    void resetWishlist(final String customerId);
+    void resetWishlist();
 }

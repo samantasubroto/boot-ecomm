@@ -1,6 +1,5 @@
 package com.example.springboot_demo.service.authentication;
 
-import com.example.springboot_demo.model.entity.Customer;
 import com.example.springboot_demo.model.entity.User;
 
 import java.util.Map;

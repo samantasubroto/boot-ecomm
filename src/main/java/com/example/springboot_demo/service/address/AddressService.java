@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface AddressService {
 
-    Address getAddressById(final Long addressId, final String userId);
+    Address getAddressById(final Long addressId);
 
-    List<Address> getUserAddresses(final String userId);
+    List<Address> getUserAddresses();
 
-    List<Address> addUserAddress(final Address address, final String userId);
+    List<Address> addUserAddress(final Address address);
 
-    Address deleteAddress(final Long id, final String userId);
+    Address deleteAddress(final Long id);
 
-    Address updateAddress(final Long id, final String userId, final Address address);
+    Address updateAddress(final Long id, final Address address);
 }

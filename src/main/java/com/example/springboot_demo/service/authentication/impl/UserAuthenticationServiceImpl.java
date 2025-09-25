@@ -37,7 +37,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             throw new IllegalArgumentException("Email and password must not be null");
         }
 
-        if (userService.getCustomerByEmail(user.getEmail()) != null) {
+        if (userService.getUserByEmail(user.getEmail()) != null) {
             throw new RuntimeException("User with email " + user.getEmail() + " already exists");
         }
 

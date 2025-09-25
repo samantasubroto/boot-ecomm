@@ -24,7 +24,7 @@ public class Order extends ItemType{
     private String orderNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    private Customer customer;
+    private User user;
 
     private OrderStatus status;
 

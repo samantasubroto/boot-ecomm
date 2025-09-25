@@ -1,19 +1,17 @@
 package com.example.springboot_demo.service.cart;
 
 import com.example.springboot_demo.model.entity.Cart;
-import com.example.springboot_demo.model.entity.Customer;
-import com.example.springboot_demo.model.entity.User;
 
 public interface CartService {
-    Cart getUserCart(final String userId);
+    Cart getUserCart();
 
-    Cart addProductToCart(final String productId, final String userId);
+    Cart addProductToCart(final String productId);
 
-    Cart removeProductFromCart(final String productId, final String userId);
+    Cart removeProductFromCart(final String productId);
 
-    Cart deleteProductFromCart(final String productId, final String userId);
+    Cart deleteProductFromCart(final String productId);
 
-    Cart deleteCart(final String userId);
+    Cart deleteCart();
 
     Cart saveCart(final Cart cart);
 }
