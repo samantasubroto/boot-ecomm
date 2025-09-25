@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EntityListeners(UserModelListner.class)
+@Table(name = "user")
 public class User extends ItemType {
 
     @Column(unique = true, updatable = false, nullable = false)
@@ -58,6 +60,7 @@ public class User extends ItemType {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @NotNull
+    @NonNull
     private Set<String> roles;
 
     @Nullable
@@ -72,4 +75,10 @@ public class User extends ItemType {
             this.uuid = UUID.randomUUID().toString();
         }
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> address;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
 }

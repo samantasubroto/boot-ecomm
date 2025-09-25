@@ -12,13 +12,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="product")
-public class Product extends ItemType {
+public class Product extends ItemType implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Size(min=7, max = 10, message = "Code must be between 7 and 10 character long")
     @Pattern(regexp = "\\d+", message = "Code must only contain numbers")

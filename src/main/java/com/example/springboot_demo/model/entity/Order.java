@@ -1,0 +1,46 @@
+package com.example.springboot_demo.model.entity;
+
+import com.example.springboot_demo.model.ItemType;
+import com.example.springboot_demo.model.enums.OrderStatus;
+import com.example.springboot_demo.model.enums.PaymentMethod;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Table(name = "orders")
+public class Order extends ItemType{
+
+    @Column(nullable = false, unique = true, length = 10)
+    private String orderNumber;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
+
+    private OrderStatus status;
+
+    private PaymentMethod paymentMethod;
+
+    @Column(name="razorpayorderid")
+    private String razorpayOrderId;
+
+    @ManyToOne
+    @JoinColumn(name = "shipping_address_id", nullable = false)
+    private Address shippingAddress;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    @Column(nullable = false)
+    private double totalPrice;
+}

@@ -1,10 +1,14 @@
 package com.example.springboot_demo.service.authentication;
 
-import com.example.springboot_demo.model.entity.Customer;
+import com.example.springboot_demo.model.entity.User;
+
+import java.util.Map;
 
 public interface UserAuthenticationService {
 
-    Customer register(final Customer customer);
+    User register(final User user);
 
-    String login(final String email, final String password);
+    Map<String, Object> login(final String email, final String password);
+
+    void logout(String uid);
 }

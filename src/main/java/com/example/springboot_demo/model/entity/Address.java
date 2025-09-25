@@ -3,6 +3,7 @@ package com.example.springboot_demo.model.entity;
 import com.example.springboot_demo.model.ItemType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Address extends ItemType {
 
     @Pattern(regexp = "[A-Za-z0-9\\s-]{3,}", message = "Not a valid street no")
@@ -40,7 +40,20 @@ public class Address extends ItemType {
     @Pattern(regexp = "[0-9]{6}", message = "Pincode not valid. Must be 6 digits")
     private String pincode;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Column(name = "is_primary_address")
+    private boolean isPrimaryAddress;
+
+    @ManyToOne
     @JsonIgnore
-    private Customer customer;
+    private User user;
+
+    public Address(String streetNo, String buildingName, String locality, String city, String state, String pincode, boolean isPrimaryAddress) {
+        this.streetNo = streetNo;
+        this.buildingName = buildingName;
+        this.locality = locality;
+        this.city = city;
+        this.state = state;
+        this.pincode = pincode;
+        this.isPrimaryAddress = isPrimaryAddress;
+    }
 }
