@@ -18,23 +18,23 @@ public class WishlistController {
     private WishlistService wishlistService;
 
     @PostMapping("/add")
-    public ResponseEntity addProductToList(@RequestParam @NotNull String productId, @RequestParam @NotNull String customerId) {
-        return new ResponseEntity<>(wishlistService.addProductToList(productId, customerId), HttpStatus.OK);
+    public ResponseEntity addProductToList(@RequestParam @NotNull String productId) {
+        return new ResponseEntity<>(wishlistService.addProductToList(productId), HttpStatus.OK);
     }
 
     @PostMapping("/remove")
-    public ResponseEntity removeProductFromList(@RequestParam @NotNull String productId, @RequestParam @NotNull String customerId) {
-        return new ResponseEntity<>(wishlistService.removeProductFromList(productId, customerId), HttpStatus.OK);
+    public ResponseEntity removeProductFromList(@RequestParam @NotNull String productId) {
+        return new ResponseEntity<>(wishlistService.removeProductFromList(productId), HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity getCustomersWishlist(@RequestParam @NotNull String customerId) {
-        return new ResponseEntity<>(wishlistService.getCustomersWishList(customerId), HttpStatus.OK);
+    public ResponseEntity getCustomersWishlist() {
+        return new ResponseEntity<>(wishlistService.getCustomersWishList(), HttpStatus.OK);
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<Void> resetWishlist(@RequestParam @NotNull String customerId) {
-        wishlistService.resetWishlist(customerId);
+    public ResponseEntity<Void> resetWishlist() {
+        wishlistService.resetWishlist();
         return ResponseEntity.ok().build();
     }
 }

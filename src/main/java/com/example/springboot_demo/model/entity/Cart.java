@@ -24,7 +24,7 @@ public class Cart extends ItemType {
 
     @OneToOne
     @JsonIgnore
-    private Customer customer;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "shipping_address")

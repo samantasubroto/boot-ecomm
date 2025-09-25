@@ -14,12 +14,12 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/placeOrder")
-    public ResponseEntity placeOrder(@RequestParam(required = true) String userId) {
-        return new ResponseEntity(this.orderService.placeOrder(userId), HttpStatus.CREATED);
+    public ResponseEntity placeOrder() {
+        return new ResponseEntity(this.orderService.placeOrder(), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity getOrders(@RequestParam(required = true) String userId) {
-        return new ResponseEntity(this.orderService.getOrders(userId), HttpStatus.FOUND);
+    public ResponseEntity getOrders() {
+        return new ResponseEntity(this.orderService.getOrders(), HttpStatus.FOUND);
     }
 }

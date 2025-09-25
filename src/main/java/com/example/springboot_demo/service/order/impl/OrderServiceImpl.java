@@ -1,9 +1,6 @@
 package com.example.springboot_demo.service.order.impl;
 
-import com.example.springboot_demo.model.entity.Cart;
-import com.example.springboot_demo.model.entity.Customer;
-import com.example.springboot_demo.model.entity.Order;
-import com.example.springboot_demo.model.entity.OrderItem;
+import com.example.springboot_demo.model.entity.*;
 import com.example.springboot_demo.model.enums.OrderStatus;
 import com.example.springboot_demo.repository.CartRepository;
 import com.example.springboot_demo.repository.OrderRepository;
@@ -36,21 +33,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order placeOrder(final String customerid) {
-        Cart cart = cartService.getUserCart(customerid);
-        Customer customer = userService.getCustomerByEmail(customerid);
+    public Order placeOrder() {
+        Cart cart = cartService.getUserCart();
+        User user = userService.getCurrentUser();
         if (cart != null && cart.getCartItems().isEmpty()) {
             throw new RuntimeException("Cart is empty");
         }
 
         Order order = new Order();
-        order.setCustomer(cart.getCustomer());
+        order.setUser(cart.getUser());
         order.setOrderNumber(generateOrderNumber());
         order.setStatus(OrderStatus.PENDING);
         order.setTotalPrice(cart.getCartTotal());
-        //Give customer more flexiblity to choose address that he/she wanna use.
-        if (customer.getAddress() != null) {
-            order.setShippingAddress(customer.getAddress().get(0));
+        //Give user more flexiblity to choose address that he/she wanna use.
+        if (user.getAddress() != null) {
+            order.setShippingAddress(user.getAddress().get(0));
         }
 
         List<OrderItem> orderItems = cart.getCartItems().stream()
@@ -76,10 +73,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<Order> getOrders(final String customerId) {
-        Customer customer = userService.getCustomerByEmail(customerId);
-        if (customer != null) {
-            return orderRepository.fetchAllOrders(customerId);
+    public List<Order> getOrders() {
+        User user = userService.getCurrentUser();
+        if (user != null) {
+            return orderRepository.fetchAllOrders(user.getUuid());
         }
         return null;
     }

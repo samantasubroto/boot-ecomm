@@ -27,7 +27,7 @@ public class PaymentGatewaysImpl implements PaymentGateways {
         JSONObject orderReq = new JSONObject();
         orderReq.put("amount", order.getTotalPrice() * 100);
         orderReq.put("currency", "INR");
-        orderReq.put("receipt", order.getCustomer().getEmail());
+        orderReq.put("receipt", order.getUser().getEmail());
         try {
             this.client = new RazorpayClient(razorPayKey, razorPaySecret);
             com.razorpay.Order razorpayOrder = client.orders.create(orderReq);
@@ -52,8 +52,8 @@ public class PaymentGatewaysImpl implements PaymentGateways {
         paymentLinkReq.put("description", "Payment for Order #" + order.getOrderNumber());
 
         JSONObject customerDetails = new JSONObject();
-        customerDetails.put("name", order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName());
-        customerDetails.put("email", order.getCustomer().getEmail());
+        customerDetails.put("name", order.getUser().getFirstName() + " " + order.getUser().getLastName());
+        customerDetails.put("email", order.getUser().getEmail());
         customerDetails.put("contact", "8801070401");
 
         paymentLinkReq.put("customer", customerDetails);

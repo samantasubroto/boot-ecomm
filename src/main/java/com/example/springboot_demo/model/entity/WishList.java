@@ -29,5 +29,5 @@ public class WishList extends ItemType {
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id", unique = true)
     @JsonIgnore
-    private Customer customer;
+    private User user;
 }

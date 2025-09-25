@@ -1,9 +1,6 @@
 package com.example.springboot_demo.service.cart.impl;
 
-import com.example.springboot_demo.model.entity.Cart;
-import com.example.springboot_demo.model.entity.CartItem;
-import com.example.springboot_demo.model.entity.Customer;
-import com.example.springboot_demo.model.entity.Product;
+import com.example.springboot_demo.model.entity.*;
 import com.example.springboot_demo.model.enums.StockStatus;
 import com.example.springboot_demo.repository.CartRepository;
 import com.example.springboot_demo.service.cart.CartService;
@@ -29,24 +26,24 @@ public class CartServiceImpl implements CartService {
     private ProductService productService;
 
     @Override
-    public Cart getUserCart(final String userId) {
-        Customer customer = userService.getCustomerByEmail(userId);
-        return getOrCreateUserCart(customer);
+    public Cart getUserCart() {
+        User user = userService.getCurrentUser();
+        return getOrCreateUserCart(user);
     }
 
     @Override
     @Transactional
-    public Cart addProductToCart(final String productId, final String userId) {
+    public Cart addProductToCart(final String productId) {
         Product product = productService.getProductByCode(productId);
-        Customer customer = userService.getCustomerByEmail(userId);
+        User user = userService.getCurrentUser();
 
-        if (product == null || customer == null) {
-            throw new RuntimeException("Invalid product or customer");
+        if (product == null || user == null) {
+            throw new RuntimeException("Invalid product or user");
         }
         if (product.getStock().stockStatus.equals(StockStatus.OUTOFSTOCK)) {
             throw new RuntimeException("Product is out of stock!!!");
         }
-        Cart cart = getOrCreateUserCart(customer);
+        Cart cart = getOrCreateUserCart(user);
         List<CartItem> cartItems = cart.getCartItems();
         cartItems.stream()
                 .filter(item -> item.getProduct().getCode().equals(product.getCode()))
@@ -70,13 +67,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public Cart removeProductFromCart(final String productId, final String userId) {
+    public Cart removeProductFromCart(final String productId) {
         Product product = productService.getProductByCode(productId);
-        Customer customer = userService.getCustomerByEmail(userId);
-        if (product == null || customer == null) {
-            throw new RuntimeException("Invalid product or customer");
+        User user = userService.getCurrentUser();
+        if (product == null || user == null) {
+            throw new RuntimeException("Invalid product or user");
         }
-        Cart cart = getOrCreateUserCart(customer);
+        Cart cart = getOrCreateUserCart(user);
         if (cart == null) {
             throw new RuntimeException("Cart not found!!!");
         }
@@ -100,13 +97,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public Cart deleteProductFromCart(final String productId, final String userId) {
+    public Cart deleteProductFromCart(final String productId) {
         Product product = productService.getProductByCode(productId);
-        Customer customer = userService.getCustomerByEmail(userId);
-        if (product == null || customer == null) {
-            throw new RuntimeException("Invalid product or customer");
+        User user = userService.getCurrentUser();
+        if (product == null || user == null) {
+            throw new RuntimeException("Invalid product or user");
         }
-        Cart cart = getOrCreateUserCart(customer);
+        Cart cart = getOrCreateUserCart(user);
         if (cart == null) {
             throw new RuntimeException("Cart not found!!!");
         }
@@ -122,12 +119,12 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public Cart deleteCart(final String userId) {
-        Customer customer = userService.getCustomerByEmail(userId);
-        if (customer == null) {
-            throw new RuntimeException("Invalid product or customer");
+    public Cart deleteCart() {
+        User user = userService.getCurrentUser();
+        if (user == null) {
+            throw new RuntimeException("Invalid product or user");
         }
-        Cart cart = getOrCreateUserCart(customer);
+        Cart cart = getOrCreateUserCart(user);
         if (cart == null) {
             return null;
         }
@@ -140,12 +137,12 @@ public class CartServiceImpl implements CartService {
         return this.cartRepository.save(cart);
     }
 
-    private Cart getOrCreateUserCart(final Customer customer) {
-        Cart cart = cartRepository.getUsersCart(customer);
+    private Cart getOrCreateUserCart(final User user) {
+        Cart cart = cartRepository.getUsersCart(user);
         if (cart == null) {
             cart = new Cart();
-            cart.setCustomer(customer);
-            customer.setCart(cart);
+            cart.setUser(user);
+            user.setCart(cart);
         }
         return cart;
     }

@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "products", key = "#code")
+//    @Cacheable(value = "products", key = "#code")
     public Product getProductByCode(final String code) {
         return productRepository.getProductByCode(code);
     }

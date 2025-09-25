@@ -45,7 +45,7 @@ public class Address extends ItemType {
 
     @ManyToOne
     @JsonIgnore
-    private Customer customer;
+    private User user;
 
     public Address(String streetNo, String buildingName, String locality, String city, String state, String pincode, boolean isPrimaryAddress) {
         this.streetNo = streetNo;

@@ -1,14 +1,12 @@
 package com.example.springboot_demo.controllers;
 
-import com.example.springboot_demo.model.*;
 import com.example.springboot_demo.model.Price;
+import com.example.springboot_demo.model.Stock;
 import com.example.springboot_demo.model.entity.Address;
-import com.example.springboot_demo.model.entity.Customer;
 import com.example.springboot_demo.model.entity.Product;
 import com.example.springboot_demo.model.entity.User;
 import com.example.springboot_demo.model.enums.Currency;
 import com.example.springboot_demo.model.enums.StockStatus;
-import com.example.springboot_demo.repository.CustomerRepository;
 import com.example.springboot_demo.repository.ProductRepository;
 import com.example.springboot_demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @RestController
 public class DataController {
@@ -26,9 +26,6 @@ public class DataController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
 
     @GetMapping("/product/data")
     public String setProd() {
@@ -79,7 +76,7 @@ public class DataController {
 
     @PostMapping("/customer/data")
     public String setUser() {
-        List<Customer> customers = new ArrayList<>();
+        List<User> customers = new ArrayList<>();
 
         // Creating Addresses for customers
         List<Address> rohitAddress = List.of(new Address("101", "Sunshine Apartments", "MG Road", "Mumbai", "Maharashtra", "400001", true));
@@ -89,11 +86,11 @@ public class DataController {
         List<Address> rainaAddress = List.of(new Address("105", "Elegant Homes", "Salt Lake", "Kolkata", "West Bengal", "700091", true));
 
         // Creating Customer objects with Address list
-        Customer rohit = new Customer("rohit", "sharma", "rohitsharma@gmail.com", "Sharma@123", "9959974149", new HashSet<>(List.of("Customer")));
-        Customer vikas = new Customer("vikas", "sharma", "vikassharma@gmail.com", "Sharma@123", "9348291212", new HashSet<>(List.of("Customer")));
-        Customer shreyas = new Customer("shreyas", "sharma", "shreyassharma@gmail.com", "Sharma@123", "9348291213", new HashSet<>(List.of("Customer")));
-        Customer virat = new Customer("virat", "sharma", "viratsharma@gmail.com", "Sharma@123", "9348291214", new HashSet<>(List.of("Customer")));
-        Customer raina = new Customer("raina", "sharma", "rainasharma@gmail.com", "Sharma@123", "9348291215", new HashSet<>(List.of("Customer")));
+        User rohit = new User("rohit", "sharma", "rohitsharma@gmail.com", "Sharma@123", "9959974149", new HashSet<>(List.of("Customer")));
+        User vikas = new User("vikas", "sharma", "vikassharma@gmail.com", "Sharma@123", "9348291212", new HashSet<>(List.of("Customer")));
+        User shreyas = new User("shreyas", "sharma", "shreyassharma@gmail.com", "Sharma@123", "9348291213", new HashSet<>(List.of("Customer")));
+        User virat = new User("virat", "sharma", "viratsharma@gmail.com", "Sharma@123", "9348291214", new HashSet<>(List.of("Customer")));
+        User raina = new User("raina", "sharma", "rainasharma@gmail.com", "Sharma@123", "9348291215", new HashSet<>(List.of("Customer")));
 
         // Setting each Address's Customer field
 //        rohit.getAddress().forEach(addr -> addr.setCustomer(rohit));
@@ -110,7 +107,7 @@ public class DataController {
         customers.add(raina);
 
         // Save all customers, which will also save addresses due to cascade
-        customerRepository.saveAll(customers);
+        userRepository.saveAll(customers);
 
         return "success";
     }

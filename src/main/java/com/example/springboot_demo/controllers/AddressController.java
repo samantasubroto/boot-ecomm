@@ -15,28 +15,27 @@ public class AddressController {
     AddressService addressService;
 
     @GetMapping("/{id}")
-    public ResponseEntity getAddressById(@PathVariable Long id, @RequestParam(required = true) String userId) {
-        return ResponseEntity.ok(AddressMapper.toDTO(addressService.getAddressById(id, userId)));
+    public ResponseEntity getAddressById(@PathVariable Long id) {
+        return ResponseEntity.ok(AddressMapper.toDTO(addressService.getAddressById(id)));
     }
 
     @GetMapping
-    public ResponseEntity getAddresses(@RequestParam(required = true) String userId) {
-        return ResponseEntity.ok(AddressMapper.toDTOList(addressService.getUserAddresses(userId)));
+    public ResponseEntity getAddresses() {
+        return ResponseEntity.ok(AddressMapper.toDTOList(addressService.getUserAddresses()));
     }
 
     @PostMapping
-    public ResponseEntity addAddress(@RequestBody(required = true) AddressDTO address,
-                                     @RequestParam(required = true) String userId) {
-        return ResponseEntity.ok(AddressMapper.toDTOList(addressService.addUserAddress(AddressMapper.toEntity(address), userId)));
+    public ResponseEntity addAddress(@RequestBody(required = true) AddressDTO address) {
+        return ResponseEntity.ok(AddressMapper.toDTOList(addressService.addUserAddress(AddressMapper.toEntity(address))));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteAddressById(@PathVariable Long id, @RequestParam(required = true) String userId) {
-        return ResponseEntity.ok(AddressMapper.toDTO(addressService.deleteAddress(id, userId)));
+    public ResponseEntity deleteAddressById(@PathVariable Long id) {
+        return ResponseEntity.ok(AddressMapper.toDTO(addressService.deleteAddress(id)));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity updateAddress(@PathVariable Long id, @RequestParam(required = true) String userId, @RequestBody(required = true) AddressDTO address) {
-        return ResponseEntity.ok(AddressMapper.toDTO(addressService.updateAddress(id, userId, AddressMapper.toEntity(address))));
+    public ResponseEntity updateAddress(@PathVariable Long id, @RequestBody(required = true) AddressDTO address) {
+        return ResponseEntity.ok(AddressMapper.toDTO(addressService.updateAddress(id, AddressMapper.toEntity(address))));
     }
 }
